@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CSV to Table</title>
+    <style>
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        table, th, td {
+            border: 1px solid black;
+        }
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+    <h1>CSV Data</h1>
+    <input type="file" id="csv-file" accept=".csv">
+    <table id="csv-table"></table>
+
+    <script>
+        // Function to parse CSV and create table
+        function parseCSV(text) {
+            const rows = text.split("\n");
+            const table = document.getElementById("csv-table");
+
+            rows.forEach((row, index) => {
+                const tr = document.createElement("tr");
+                const cells = row.split(",");
+                
+                cells.forEach((cell) => {
+                    const td = document.createElement(index === 0 ? "th" : "td");
+                    td.textContent = cell.trim();
+                    tr.appendChild(td);
+                });
+
+                table.appendChild(tr);
+            });
+        }
+
+        // Event listener for file upload
+        document.getElementById("csv-file").addEventListener("change", function(event) {
+            const file = event.target.files[0];
+
+            if (file && file.type === "Titanic-Dataset.csv/csv") {
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    const text = e.target.result;
+                    parseCSV(text);
+                };
+                reader.readAsText(file);
+            } else {
+                alert("Please upload a valid CSV file.");
+            }
+        });
+    </script>
+</body>
+</html>
